@@ -18,7 +18,6 @@ export const ThemeContextProvider = ({ children }) => {
       document.documentElement.classList.remove("dark");
     }
     setTheme(localStorage.getItem("themeName"));
-    console.log(theme);
   }, [theme]);
 
   const toggleTheme = () => {

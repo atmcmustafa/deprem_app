@@ -6,7 +6,8 @@ import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 
 const App = () => {
   const [result, setResult] = useState();
-
+  const [filteredResult, setFilteredResult] = useState([]);
+  const [filteredMag, setFilteredMag] = useState([]);
   let btn = document.getElementById("btn");
 
   // When the user scrolls down 20px from the top of the document, show the button
@@ -37,6 +38,7 @@ const App = () => {
       const res = await fetch(url);
       const data = await res.json();
       setResult(data);
+      console.log(data);
     } catch (error) {
       console.log("error");
     }
@@ -49,7 +51,27 @@ const App = () => {
   const refreshPage = () => {
     setResult("");
     getApi();
+    setFilteredMag([]);
   };
+
+  const filterMag = async () => {
+    const url = "https://api.orhanaydogdu.com.tr/deprem/kandilli/live";
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      setFilteredResult(data.result);
+    } catch (error) {
+      console.log("error");
+    }
+    setFilteredMag(filteredResult.filter((filtered) => filtered.mag > 2.5));
+
+    console.log(filteredMag);
+  };
+
+  useEffect(() => {
+    filterMag();
+  }, []);
 
   return (
     <div className="dark:bg-gray-800 duration-300 px-4 md:px-0 relative">
@@ -61,44 +83,79 @@ const App = () => {
         <MdOutlineKeyboardArrowUp size={24} />
       </div>
       <div className="container mx-auto">
-        <Header onClick={() => refreshPage()} />
+        <Header filter={() => filterMag()} onClick={() => refreshPage()} />
         <h2 className="text-center mb-4 dark:text-zinc-100 duration-300">
           {result
-            ? "Son 24 saatte " + result.result.length + " deprem tespit edildi"
+            ? "Son 24 saatte " + result.metadata.total + " deprem tespit edildi"
             : ""}
         </h2>
 
         <div>
-          {result ? (
-            result.result.map((data, index) => {
-              const nowTime = new Date();
-              const time = new Date(data.date);
+          {filteredMag.length > 0 ? (
+            <div className="relative">
+              {filteredMag ? (
+                filteredMag.map((data, index) => {
+                  const nowTime = new Date();
+                  const time = new Date(data.date);
 
-              const elapsed = nowTime.getTime() - time.getTime();
-              const secondAgo = Math.floor(elapsed / 1000);
-              const minutesAgo = Math.floor(secondAgo / 60);
-              const hourAgo = Math.floor(minutesAgo / 60);
+                  const elapsed = nowTime.getTime() - time.getTime();
+                  const secondAgo = Math.floor(elapsed / 1000);
+                  const minutesAgo = Math.floor(secondAgo / 60);
+                  const hourAgo = Math.floor(minutesAgo / 60);
 
-              return (
-                <Card
-                  date={data.date}
-                  depth={data.depth}
-                  elapsed_time={
-                    hourAgo < 24
-                      ? hourAgo === 0
-                        ? `• ${minutesAgo} dakika önce`
-                        : `• ${hourAgo} saat önce`
-                      : ""
-                  }
-                  mag={data.mag}
-                  title={data.title}
-                  key={index}
-                />
-              );
-            })
+                  return (
+                    <Card
+                      date={data.date}
+                      depth={data.depth}
+                      elapsed_time={
+                        hourAgo < 24
+                          ? hourAgo === 0
+                            ? `• ${minutesAgo} dakika önce`
+                            : `• ${hourAgo} saat önce`
+                          : ""
+                      }
+                      mag={data.mag}
+                      title={data.title}
+                      key={index}
+                    />
+                  );
+                })
+              ) : (
+                <span className="loader"></span>
+              )}
+            </div>
           ) : (
-            <div className="flex justify-center items-center absolute h-screen mx-auto w-full">
-              <div className="loader dark:!text-red-500"></div>
+            <div>
+              {result ? (
+                result.result.map((data, index) => {
+                  const nowTime = new Date();
+                  const time = new Date(data.date);
+
+                  const elapsed = nowTime.getTime() - time.getTime();
+                  const secondAgo = Math.floor(elapsed / 1000);
+                  const minutesAgo = Math.floor(secondAgo / 60);
+                  const hourAgo = Math.floor(minutesAgo / 60);
+
+                  return (
+                    <Card
+                      date={data.date}
+                      depth={data.depth}
+                      elapsed_time={
+                        hourAgo < 24
+                          ? hourAgo === 0
+                            ? `• ${minutesAgo} dakika önce`
+                            : `• ${hourAgo} saat önce`
+                          : ""
+                      }
+                      mag={data.mag}
+                      title={data.title}
+                      key={index}
+                    />
+                  );
+                })
+              ) : (
+                <span className="loader"></span>
+              )}
             </div>
           )}
         </div>

@@ -3,7 +3,7 @@ import { ThemeContext } from "../context/ThemeContext";
 import { IoMoonSharp } from "react-icons/io5";
 import { MdWbSunny } from "react-icons/md";
 
-const Header = ({ onClick }) => {
+const Header = ({ onClick, filter }) => {
   const { toggleTheme, theme } = useContext(ThemeContext);
   return (
     <div className="">
@@ -16,6 +16,13 @@ const Header = ({ onClick }) => {
           >
             Yenile
           </button>
+          <button
+            className="rounded-lg h-8 w-16 text-sm bg-slate-700 flex items-center justify-center text-zinc-100 "
+            onClick={filter}
+          >
+            Filtrele
+          </button>
+
           <span className="cursor-pointer" onClick={toggleTheme}>
             {theme === "light" ? (
               <IoMoonSharp size={24} />
