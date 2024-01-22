@@ -34,7 +34,7 @@ const EarthquakeDetails = () => {
   };
 
   const customIcon = L.icon({
-    iconUrl: "../../public/location.png",
+    iconUrl: "/location.png",
     iconSize: [48, 48],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
