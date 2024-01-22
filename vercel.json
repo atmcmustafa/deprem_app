@@ -1,10 +1,5 @@
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
-  ],
-  "public": {
-    "include": [
-      "public/**/*"
-    ]
-  }
+  "rewrites":  [
+    {"source": "/(.*)", "destination": "/"}
+  ]
 }
