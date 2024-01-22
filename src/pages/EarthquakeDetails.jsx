@@ -12,7 +12,6 @@ const EarthquakeDetails = () => {
   const { id } = useParams();
   const [currentQuake, setCurrentQuake] = useState([]);
   const { toggleTheme, theme } = useContext(ThemeContext);
-  console.log(id);
   const navigate = useNavigate();
 
   const goDetails = async () => {
@@ -21,7 +20,6 @@ const EarthquakeDetails = () => {
       const res = await fetch(url);
       const data = await res.json();
       setCurrentQuake(data);
-      console.log(currentQuake);
     } catch (error) {
       console.log("error");
     }
@@ -32,9 +30,16 @@ const EarthquakeDetails = () => {
   }, [id]);
 
   const handleGoBack = () => {
-    // Geri butonuna tıklandığında bir önceki sayfaya git
     navigate(-1);
   };
+
+  const customIcon = L.icon({
+    iconUrl: "../../public/location.png",
+    iconSize: [48, 48],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+  });
+
   return (
     <div className="mx-4 md:mx-0">
       {/*header  */}
@@ -112,12 +117,15 @@ const EarthquakeDetails = () => {
       <div className="container mx-auto max-w-6xl">
         {currentQuake && currentQuake.result && currentQuake.result.geojson && (
           <MapContainer
-            center={currentQuake.result.geojson.coordinates.reverse()} // [latitude, longitude] sırasını düzeltiyoruz
+            center={currentQuake.result.geojson.coordinates.reverse()}
             zoom={10}
             style={{ height: "400px", width: "100%", marginTop: "20px" }}
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={currentQuake.result.geojson.coordinates}>
+            <Marker
+              icon={customIcon}
+              position={currentQuake.result.geojson.coordinates}
+            >
               <Popup>{currentQuake.result.title}</Popup>
             </Marker>
           </MapContainer>
