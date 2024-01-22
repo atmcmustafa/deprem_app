@@ -3,34 +3,35 @@ import Card from "./components/Card";
 import { useEffect } from "react";
 import { useState } from "react";
 import { MdOutlineKeyboardArrowUp } from "react-icons/md";
+import toast, { Toaster } from "react-hot-toast";
 
 const App = () => {
   const [result, setResult] = useState();
   const [filteredResult, setFilteredResult] = useState([]);
   const [filteredMag, setFilteredMag] = useState([]);
-  let btn = document.getElementById("btn");
+  const [value, setValue] = useState(1);
+  const [scrollY, setScrollY] = useState(0);
 
-  // When the user scrolls down 20px from the top of the document, show the button
-  window.onscroll = function () {
-    scrollFunction();
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const isButtonVisible = scrollY > 20;
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
-
-  function scrollFunction() {
-    if (
-      document.body.scrollTop > 20 ||
-      document.documentElement.scrollTop > 20
-    ) {
-      btn.style.display = "flex";
-    } else {
-      btn.style.display = "none";
-    }
-  }
-
-  // When the user clicks on the button, scroll to the top of the document
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
 
   const getApi = async () => {
     const url = "https://api.orhanaydogdu.com.tr/deprem/kandilli/live";
@@ -38,9 +39,35 @@ const App = () => {
       const res = await fetch(url);
       const data = await res.json();
       setResult(data);
-      console.log(data);
     } catch (error) {
       console.log("error");
+      toast.error(error);
+    }
+  };
+
+  const filterMag = async () => {
+    const url = "https://api.orhanaydogdu.com.tr/deprem/kandilli/live";
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      setFilteredResult(data.result);
+
+      const filteredMagResults = data.result.filter(
+        (filtered) => filtered.mag > value
+      );
+      setFilteredMag(filteredMagResults);
+
+      if (filteredMagResults.length === 0) {
+        toast.error(`${value} büyüklüğü üstünde deprem bulunamadı!`);
+      } else {
+        toast.success(
+          `${value} büyüklüğü üstünde ${filteredMagResults.length} deprem bulundu!`
+        );
+      }
+    } catch (error) {
+      console.log("error");
+      toast.error(error);
     }
   };
 
@@ -52,38 +79,30 @@ const App = () => {
     setResult("");
     getApi();
     setFilteredMag([]);
+    setFilteredResult([]);
   };
-
-  const filterMag = async () => {
-    const url = "https://api.orhanaydogdu.com.tr/deprem/kandilli/live";
-
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      setFilteredResult(data.result);
-    } catch (error) {
-      console.log("error");
-    }
-    setFilteredMag(filteredResult.filter((filtered) => filtered.mag > 2.5));
-
-    console.log(filteredMag);
-  };
-
-  useEffect(() => {
-    filterMag();
-  }, []);
 
   return (
     <div className="dark:bg-gray-800 duration-300 px-4 md:px-0 relative">
-      <div
-        onClick={topFunction}
-        id="btn"
-        className="btn h-8 w-8 duration-300 rounded bottom-6 right-6 fixed dark:bg-slate-100/50 bg-zinc-600/50  flex items-center justify-center"
-      >
-        <MdOutlineKeyboardArrowUp size={24} />
+      <div>
+        <Toaster />
       </div>
+      {isButtonVisible && (
+        <button
+          className="btn h-8 w-8 duration-300 rounded bottom-6 right-6 fixed dark:bg-slate-100/50 bg-zinc-600/50  flex items-center justify-center"
+          onClick={scrollToTop}
+        >
+          <MdOutlineKeyboardArrowUp size={24} />
+        </button>
+      )}
+
       <div className="container mx-auto">
-        <Header filter={() => filterMag()} onClick={() => refreshPage()} />
+        <Header
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          filter={() => filterMag()}
+          onClick={() => refreshPage()}
+        />
         <h2 className="text-center mb-4 dark:text-zinc-100 duration-300">
           {result
             ? "Son 24 saatte " + result.metadata.total + " deprem tespit edildi"
