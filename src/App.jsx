@@ -89,7 +89,7 @@ const App = () => {
       </div>
       {isButtonVisible && (
         <button
-          className="btn h-8 w-8 duration-300 rounded bottom-6 right-6 fixed dark:bg-slate-100/50 bg-zinc-600/50  flex items-center justify-center"
+          className="btn h-8 w-8 duration-300 rounded bottom-6 right-6 fixed dark:bg-slate-100/50 bg-zinc-600/50  flex items-center justify-center z-50"
           onClick={scrollToTop}
         >
           <MdOutlineKeyboardArrowUp size={24} />
