@@ -11,7 +11,7 @@
 -![image](https://github.com/atmcmustafa/deprem_app/assets/98126723/ad5959fe-2810-4aad-98eb-7f2e0e1731ea)
 
 
-  - Detaylar sayfasında ise mevcut bilgilerin yanında yakındaki şehir ve havalimanları görüntülenir.
+- Detaylar sayfasında ise mevcut bilgilerin yanında yakındaki şehir ve havalimanları görüntülenir.
 - ![image](https://github.com/atmcmustafa/deprem_app/assets/98126723/6c729bb8-a09e-4596-bb7d-8d91547b0f14)
 
 
