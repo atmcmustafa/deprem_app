@@ -41,7 +41,7 @@ const EarthquakeDetails = () => {
       <div>
         <header className="flex duration-300 justify-between items-center max-w-6xl mx-auto py-4 dark:text-zinc-100">
           <button
-            className="h-10 w-10 bg-slate-700 text-zinc-100 flex items-center justify-center rounded"
+            className="h-10 w-10 bg-slate-700 hover:bg-slate-600 text-zinc-100 flex items-center justify-center rounded"
             onClick={handleGoBack}
           >
             <FaArrowLeft size={16} />

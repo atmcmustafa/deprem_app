@@ -2,7 +2,7 @@ const Card = ({ mag, title, depth, date, elapsed_time, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="rounded-lg p-4 bg-zinc-100 max-w-6xl mx-auto flex gap-5 items-center mt-4 duration-300 dark:bg-slate-900"
+      className="rounded-lg p-4 hover:bg-zinc-300 dark:hover:bg-slate-950 bg-zinc-100 max-w-6xl mx-auto flex gap-5 items-center mt-4 duration-300 dark:bg-slate-900"
     >
       <span
         className={`rounded-lg bg-zinc-300 h-10 w-10 flex items-center justify-center font-bold text-lg ${
