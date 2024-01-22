@@ -9,8 +9,8 @@ const Header = ({ onClick, filter, value, onChange }) => {
   const [visible, setVisible] = useState(false);
 
   return (
-    <div className="">
-      <header className="flex duration-300 justify-between items-center max-w-6xl mx-auto py-4 dark:text-zinc-100">
+    <div>
+      <header className="flex duration-300 justify-between items-center max-w-6xl mx-auto py-4 dark:text-zinc-100 ">
         <h1>Son Depremler</h1>
         <div className="flex gap-4 items-center relative">
           <button

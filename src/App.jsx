@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 import toast, { Toaster } from "react-hot-toast";
+import { Link, useParams } from "react-router-dom";
 
 const App = () => {
   const [result, setResult] = useState();
@@ -39,6 +40,7 @@ const App = () => {
       const res = await fetch(url);
       const data = await res.json();
       setResult(data);
+      console.log(result);
     } catch (error) {
       console.log("error");
       toast.error(error);
@@ -109,7 +111,7 @@ const App = () => {
             : ""}
         </h2>
 
-        <div>
+        <div className="max-w-6xl mx-auto">
           {filteredMag.length > 0 ? (
             <div className="relative">
               {filteredMag ? (
@@ -123,20 +125,22 @@ const App = () => {
                   const hourAgo = Math.floor(minutesAgo / 60);
 
                   return (
-                    <Card
-                      date={data.date}
-                      depth={data.depth}
-                      elapsed_time={
-                        hourAgo < 24
-                          ? hourAgo === 0
-                            ? `• ${minutesAgo} dakika önce`
-                            : `• ${hourAgo} saat önce`
-                          : ""
-                      }
-                      mag={data.mag}
-                      title={data.title}
-                      key={index}
-                    />
+                    <Link key={index} to={`/details/${data.earthquake_id}`}>
+                      <Card
+                        date={data.date}
+                        depth={data.depth}
+                        elapsed_time={
+                          hourAgo < 24
+                            ? hourAgo === 0
+                              ? `• ${minutesAgo} dakika önce`
+                              : `• ${hourAgo} saat önce`
+                            : ""
+                        }
+                        mag={data.mag}
+                        title={data.title}
+                        key={index}
+                      />
+                    </Link>
                   );
                 })
               ) : (
@@ -156,20 +160,21 @@ const App = () => {
                   const hourAgo = Math.floor(minutesAgo / 60);
 
                   return (
-                    <Card
-                      date={data.date}
-                      depth={data.depth}
-                      elapsed_time={
-                        hourAgo < 24
-                          ? hourAgo === 0
-                            ? `• ${minutesAgo} dakika önce`
-                            : `• ${hourAgo} saat önce`
-                          : ""
-                      }
-                      mag={data.mag}
-                      title={data.title}
-                      key={index}
-                    />
+                    <Link key={index} to={`/details/${data.earthquake_id}`}>
+                      <Card
+                        date={data.date}
+                        depth={data.depth}
+                        elapsed_time={
+                          hourAgo < 24
+                            ? hourAgo === 0
+                              ? `• ${minutesAgo} dakika önce`
+                              : `• ${hourAgo} saat önce`
+                            : ""
+                        }
+                        mag={data.mag}
+                        title={data.title}
+                      />
+                    </Link>
                   );
                 })
               ) : (
